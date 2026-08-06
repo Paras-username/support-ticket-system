@@ -13,29 +13,26 @@ app.use(express.json());
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
-const projectRoutes = require('./routes/projectRoutes');
-const taskRoutes = require('./routes/taskRoutes');
-const dashboardRoutes = require('./routes/dashboardRoutes');
+const bookRoutes = require('./routes/bookRoutes'); // ✅ NEW
 
 // Use routes
 app.use('/api/auth', authRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/tasks', taskRoutes);
-app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/books', bookRoutes); // ✅ NEW
 
 // Test route
 app.get('/api', (req, res) => {
-    res.json({ message: 'Team Task Manager API is running' });
+  res.json({ message: 'Personal Book Manager API is running' });
 });
 
 // MongoDB connection
 const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log('MongoDB Connected Successfully');
-    } catch (error) {
-        console.error('MongoDB Connection Error:', error.message);
-    }
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('MongoDB Connected Successfully');
+  } catch (error) {
+    console.error('MongoDB Connection Error:', error.message);
+    process.exit(1);
+  }
 };
 
 connectDB();
