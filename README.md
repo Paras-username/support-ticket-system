@@ -1,155 +1,153 @@
-# Personal Book Manager
+# Support Ticket System
 
-A full-stack web application for managing your personal book collection. Built with the MERN stack, this application allows users to sign up, log in, and manage books with tags and reading status.
+A full-stack support ticket/helpdesk system with role-based access control (Customer/Admin), built with the MERN stack.
 
 ## Live Demo
 
-- Frontend: https://personal-book-manager-flame.vercel.app
-- Backend API: https://personal-book-manager-stpn.onrender.com/api
+* **Frontend:** https://support-ticket-system-dusky.vercel.app
+* **Backend API:** https://support-ticket-system-khcb.onrender.com/api
+
+## Test Credentials
+
+### Admin Account
+
+* **Email:** [admin@system.com]
+* **Password:** admin123
+
+### Customer Account
+
+* **Email:** [test@customer.com]
+* **Password:** 123456
 
 ## Tech Stack
 
-- Frontend: React.js, Tailwind CSS
-- Backend: Node.js, Express.js
-- Database: MongoDB Atlas
-- Authentication: JWT (JSON Web Tokens)
-- Icons: Lucide React
+* **Backend:** Node.js, Express.js, MongoDB, JWT, Cloudinary
+* **Frontend:** React.js, Vite, Tailwind CSS, Recharts
 
 ## Features
 
-### Authentication
-- User signup with email and password
-- User login with JWT token generation
-- Protected routes (only logged-in users can access)
-- Logout functionality
+### Customer
 
-### Book Management
-- Add books with title, author, tags, and status
-- Edit existing books
-- Delete books with confirmation modal
-- View all books in a responsive grid layout
+* Create tickets with title, description, priority, and category
+* Upload file attachments (images, PDFs, and documents)
+* View personal tickets with status history
+* Track ticket workflow: **Open → In Progress → Resolved**
 
-### Filtering and Statistics
-- Filter books by reading status (Want to Read, Reading, Completed)
-- Filter books by tags
-- Real-time statistics showing total books and books by status
+### Admin
 
-### User Experience
-- Clean, modern UI with Tailwind CSS
-- Responsive design for all screen sizes
-- Modal forms for adding/editing books
-- Delete confirmation to prevent accidental deletion
-
-## Project Structure
-personal-book-manager/
-├── backend/
-│ ├── models/
-│ │ ├── User.js
-│ │ └── Book.js
-│ ├── routes/
-│ │ ├── authRoutes.js
-│ │ └── bookRoutes.js
-│ ├── middleware/
-│ │ └── auth.js
-│ ├── server.js
-│ └── .env
-├── frontend/
-│ ├── src/
-│ │ ├── components/
-│ │ │ ├── BookStats.jsx
-│ │ │ ├── BookCard.jsx
-│ │ │ ├── BookForm.jsx
-│ │ │ ├── Login.jsx
-│ │ │ └── Signup.jsx
-│ │ ├── pages/
-│ │ │ └── Dashboard.jsx
-│ │ ├── context/
-│ │ │ └── AuthContext.jsx
-│ │ ├── utils/
-│ │ │ └── api.js
-│ │ ├── App.jsx
-│ │ ├── main.jsx
-│ │ └── index.css
-│ ├── package.json
-│ ├── tailwind.config.js
-│ └── postcss.config.js
-└── README.md
-
+* View all tickets with search, filtering, and pagination
+* Update ticket status with change history
+* Delete tickets
+* View analytics dashboard with charts
+* Ticket trends and priority distribution
 
 ## Local Setup
 
-### Prerequisites
-- Node.js (v18 or higher)
-- MongoDB Atlas account (or local MongoDB)
-- Git
+### Backend
 
-### Backend Setup
-
-1. Clone the repository
-git clone https://github.com/Paras-username/personal-book-manager.git
-cd personal-book-manager/backend
-
-
-2. Install dependencies
+```bash
+cd backend
 npm install
+```
 
+Create a `.env` file:
 
-3. Create a `.env` file
+```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+FRONTEND_URL=http://localhost:5173
+```
 
+Start the backend:
 
-4. Start the backend server
-npm start
-
-
-### Frontend Setup
-
-1. Navigate to the frontend folder
-cd ../frontend
-
-
-2. Install dependencies
-npm install
-
-
-3. Create a `.env` file
-VITE_API_URL=http://localhost:5000/api
-
-
-4. Start the frontend development server
+```bash
 npm run dev
+```
 
+### Frontend
 
-5. Open `http://localhost:5173` in your browser
+```bash
+cd frontend
+npm install
+```
+
+Create a `.env` file:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+Start the frontend:
+
+```bash
+npm run dev
+```
+
+## Environment Variables
+
+### Backend
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+FRONTEND_URL=http://localhost:5173
+```
+
+### Frontend
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
 
 ## Deployment
 
-### Backend (Render)
-1. Push your code to GitHub
-2. Create a new Web Service on Render
-3. Connect your repository and set root directory to `backend`
-4. Add environment variables (MONGO_URI, JWT_SECRET)
-5. Deploy
+* **Frontend:** Vercel
+* **Backend:** Render
+* **Database:** MongoDB Atlas
+* **File Storage:** Cloudinary
 
-### Frontend (Vercel)
-1. Push your code to GitHub
-2. Import your project on Vercel
-3. Set root directory to `frontend`
-4. Deploy
+## API Endpoints
+
+| Method | Endpoint                  | Access   | Description              |
+| ------ | ------------------------- | -------- | ------------------------ |
+| POST   | `/api/auth/signup`        | Public   | Register a new user      |
+| POST   | `/api/auth/login`         | Public   | Login                    |
+| POST   | `/api/tickets`            | Customer | Create a ticket          |
+| GET    | `/api/tickets`            | Both     | Get tickets              |
+| PUT    | `/api/tickets/:id/status` | Admin    | Update ticket status     |
+| DELETE | `/api/tickets/:id`        | Admin    | Delete a ticket          |
+| GET    | `/api/tickets/analytics`  | Admin    | Get dashboard analytics  |
+| POST   | `/api/tickets/:id/upload` | Both     | Upload a file attachment |
+
+## Features Checklist
+
+* ✅ JWT Authentication with Role-Based Access Control
+* ✅ Email/Password Authentication
+* ✅ Ticket CRUD Operations
+* ✅ Status Workflow with History
+* ✅ File Attachment Upload using Cloudinary
+* ✅ Search, Filter, and Pagination
+* ✅ Admin Analytics Dashboard with Charts
+* ✅ Status History Timeline
+* ✅ Loading, Error, and Empty States
+* ✅ Responsive Design
+* ✅ Live Deployment
 
 ## Contact
 
-Paras Poria
-- GitHub: https://github.com/Paras-username
-- Email: parasporia4@gmail.com
+**Paras Poria**
+
+* **GitHub:** https://github.com/Paras-username
+* **Email:** [parasporia4@gmail.com]
 
 ## License
 
-This project is created for the Personal Book Manager Assignment by Thumbstack.
-
-## Acknowledgments
-
-- Assignment by Thumbstack
-- Built with React, Node.js, Express, MongoDB, and Tailwind CSS
+This project was created for the **Trainee - MERN Stack position at NIANS, Gurugram**.
