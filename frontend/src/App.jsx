@@ -3,11 +3,21 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Dashboard from './pages/Dashboard';
+import CustomerDashboard from './pages/CustomerDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ children, adminOnly = false }) => {
     const { user } = React.useContext(AuthContext);
-    return user ? children : <Navigate to="/login" />;
+    
+    if (!user) {
+        return <Navigate to="/login" />;
+    }
+    
+    if (adminOnly && user.role !== 'admin') {
+        return <Navigate to="/dashboard" />;
+    }
+    
+    return children;
 };
 
 function App() {
@@ -21,7 +31,15 @@ function App() {
                         path="/dashboard"
                         element={
                             <PrivateRoute>
-                                <Dashboard />
+                                <CustomerDashboard />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin"
+                        element={
+                            <PrivateRoute adminOnly={true}>
+                                <AdminDashboard />
                             </PrivateRoute>
                         }
                     />

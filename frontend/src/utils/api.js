@@ -1,7 +1,24 @@
+// import axios from 'axios';
+
+// const API = axios.create({
+//     baseURL: 'http://localhost:5000/api',  // ← CHANGE THIS
+// });
+
+// // Add token to every request
+// API.interceptors.request.use((req) => {
+//     const token = localStorage.getItem('token');
+//     if (token) {
+//         req.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return req;
+// });
+
+// export default API;
+
 import axios from 'axios';
 
 const API = axios.create({
-    baseURL: 'https://personal-book-manager-stpn.onrender.com/api',
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
 });
 
 // Add token to every request

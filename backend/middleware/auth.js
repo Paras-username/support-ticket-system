@@ -15,14 +15,15 @@ const authMiddleware = (req, res, next) => {
         // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         
-        // ✅ FIX: Map userId to id for consistency
+        // ✅ UPDATE: Include role in req.user
         req.user = {
             id: decoded.userId || decoded._id || decoded.id,
             email: decoded.email,
-            name: decoded.name
+            name: decoded.name,
+            role: decoded.role || 'customer'  // ← ADD THIS: Get role from JWT, default to customer
         };
         
-        console.log('✅ Auth - User ID:', req.user.id); // Debug log
+        console.log('✅ Auth - User ID:', req.user.id, 'Role:', req.user.role); // Debug log
         
         next();
     } catch (error) {
