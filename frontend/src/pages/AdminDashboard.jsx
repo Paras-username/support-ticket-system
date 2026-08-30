@@ -1279,7 +1279,6 @@
 // export default AdminDashboard;
 
 
-
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -1302,17 +1301,31 @@ const AdminDashboard = () => {
     const [statusNote, setStatusNote] = useState('');
     const [updating, setUpdating] = useState(false);
 
+    // ✅ Initial load - fetch all tickets
     useEffect(() => {
-        fetchData();
+        fetchDataWithParams('', '', '');
     }, []);
 
-    const fetchData = async () => {
+    // ✅ Fetch with specific params (search, status, priority)
+    const fetchDataWithParams = async (searchValue, statusValue, priorityValue) => {
         try {
             setLoading(true);
             const params = new URLSearchParams();
-            if (search) params.append('search', search);
-            if (filterStatus) params.append('status', filterStatus);
-            if (filterPriority) params.append('priority', filterPriority);
+            
+            if (searchValue && searchValue.trim()) {
+                params.append('search', searchValue.trim());
+            }
+            if (statusValue) {
+                params.append('status', statusValue);
+            }
+            if (priorityValue) {
+                params.append('priority', priorityValue);
+            }
+            
+            params.append('page', '1');
+            params.append('limit', '100');
+            
+            console.log('Fetching with params:', params.toString());
             
             const ticketsRes = await API.get(`/tickets?${params.toString()}`);
             const analyticsRes = await API.get('/tickets/analytics');
@@ -1331,16 +1344,18 @@ const AdminDashboard = () => {
         }
     };
 
+    // ✅ Handle Search form submit
     const handleSearch = (e) => {
         e.preventDefault();
-        fetchData();
+        fetchDataWithParams(search, filterStatus, filterPriority);
     };
 
+    // ✅ Handle Reset button
     const handleReset = () => {
         setSearch('');
         setFilterStatus('');
         setFilterPriority('');
-        fetchData();
+        fetchDataWithParams('', '', '');
     };
 
     const handleStatusUpdate = async (e) => {
@@ -1355,7 +1370,8 @@ const AdminDashboard = () => {
             });
             
             if (res.data.success) {
-                await fetchData();
+                // Refresh with current filters
+                fetchDataWithParams(search, filterStatus, filterPriority);
                 setShowStatusModal(false);
                 setSelectedTicket(null);
                 setNewStatus('');
@@ -1375,7 +1391,7 @@ const AdminDashboard = () => {
         try {
             const res = await API.delete(`/tickets/${ticketId}`);
             if (res.data.success) {
-                await fetchData();
+                fetchDataWithParams(search, filterStatus, filterPriority);
             }
         } catch (err) {
             console.error('Delete error:', err);

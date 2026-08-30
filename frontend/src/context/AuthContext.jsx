@@ -65,8 +65,26 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
+    // ✅ Add helper functions
+    const isAdmin = () => {
+        return user?.role === 'admin';
+    };
+
+    const isCustomer = () => {
+        return user?.role === 'customer';
+    };
+
     return (
-        <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+        <AuthContext.Provider value={{ 
+            user, 
+            loading, 
+            login, 
+            signup, 
+            logout, 
+            setUser,      // ← ADD THIS
+            isAdmin,      // ← ADD THIS
+            isCustomer    // ← ADD THIS
+        }}>
             {children}
         </AuthContext.Provider>
     );

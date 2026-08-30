@@ -48,12 +48,11 @@
 //   console.log(`Server running on port ${PORT}`);
 //   console.log(`API URL: http://localhost:${PORT}/api`);
 // });
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-// const passport = require('passport');  // ← COMMENT THIS
+const passport = require('passport');  // ← UNCOMMENT THIS
 
 dotenv.config();
 
@@ -63,10 +62,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(passport.initialize());  // ← COMMENT THIS
+app.use(passport.initialize());  // ← UNCOMMENT THIS
 
 // Initialize Passport config
-// require('./config/passport');  // ← COMMENT THIS
+require('./config/passport');  // ← UNCOMMENT THIS
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');

@@ -317,4 +317,37 @@ router.post('/login', async (req, res) => {
 //     }
 // );
 
+
+
+router.get('/google', passport.authenticate('google', { 
+    scope: ['profile', 'email'] 
+}));
+
+router.get('/google/callback', 
+    passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+    async (req, res) => {
+        try {
+            const user = req.user;
+            const token = jwt.sign(
+                { 
+                    userId: user._id, 
+                    email: user.email,
+                    name: user.name,
+                    role: user.role 
+                },
+                process.env.JWT_SECRET,
+                { expiresIn: '7d' }
+            );
+            
+            const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+            res.redirect(`${frontendURL}/oauth-callback?token=${token}`);
+            
+        } catch (error) {
+            console.error('Google callback error:', error);
+            const frontendURL = process.env.FRONTEND_URL || 'http://localhost:5173';
+            res.redirect(`${frontendURL}/login?error=Google+login+failed`);
+        }
+    }
+);
+
 module.exports = router;
