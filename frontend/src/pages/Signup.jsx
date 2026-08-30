@@ -45,10 +45,9 @@ const Signup = () => {
         setLoading(false);
     };
 
-    const handleGoogleSignup = () => {
-        window.location.href = 'http://localhost:5000/api/auth/google';
-    };
-
+const handleGoogleSignup = () => {
+    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
+};
     return (
         <div style={styles.container}>
             <div style={styles.card}>
